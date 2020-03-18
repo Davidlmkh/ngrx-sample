@@ -1,8 +1,10 @@
+import { createEntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, createReducer, on } from '@ngrx/store';
-import { AppActions } from '../actions';
+import { AppActions } from 'src/app/modules/root-store/actions';
+import { User } from 'src/app/users.service';
 import { AppActionsUnion } from './../actions/app.actions';
 
-export interface CurrentUserState {
+export interface CurrentUserState extends EntityState<User> {
   username: string;
   birthDate: Date;
   admin: boolean;
@@ -10,9 +12,14 @@ export interface CurrentUserState {
     city: string;
     country: string;
   };
+  usersLoading: boolean;
 }
 
-const initialState: CurrentUserState = {
+export const adapter = createEntityAdapter<User>({
+  selectId: u => u.name,
+});
+
+const initialState: CurrentUserState = adapter.getInitialState({
   admin: false,
   birthDate: new Date('1993-01-01'),
   username: 'Toto',
@@ -20,10 +27,39 @@ const initialState: CurrentUserState = {
     city: 'Lyon',
     country: 'France',
   },
-};
+  usersLoading: false,
+});
 
 const reducer = createReducer(
   initialState,
+  on(
+    AppActions.loadUsers,
+    state => ({
+      ...state,
+      usersLoading: true,
+    }),
+  ),
+  on(
+    AppActions.loadUsersSuceeded,
+    (state, { users }) => adapter.setAll(users, {
+      ...state,
+      usersLoading: false,
+    }),
+  ),
+  on(
+    AppActions.deleteUser,
+    state => ({
+      ...state,
+      usersLoading: true,
+    }),
+  ),
+  on(
+    AppActions.deleteUserSucceeded,
+    (state, { name }) => adapter.removeOne(name, {
+      ...state,
+      usersLoading: false,
+    }),
+  ),
   on(
     AppActions.setCurrentUserAdmin,
     state => ({ // literal return
@@ -34,7 +70,7 @@ const reducer = createReducer(
   on(
     AppActions.setCurrentUserNonAdmin,
     state => {
-      return { // syntax is different by behavior is the same
+      return {
         ...state,
         admin: false,
       };

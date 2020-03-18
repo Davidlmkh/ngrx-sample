@@ -17,4 +17,4 @@ function pureReduce(num, discriminator) {
   return num / discriminator;
 }
 
-// pure function should ALWAYS return the same thing, independently from anything else as the parameters
+// pure function should ALWAYS return the same thing, independently from anything else but the parameters

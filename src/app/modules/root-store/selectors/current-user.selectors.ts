@@ -1,9 +1,27 @@
 import { createSelector } from '@ngrx/store';
 import { AppState } from '../reducers';
+import { adapter } from '../reducers/current-user.reducers';
 
-const yearDuration = 1000 * 60 * 60 * 24 * 365;
+const yearDuration = 1000 * 60 * 60 * 24 * 365.25;
+
+export const {
+  selectIds,
+  selectEntities,
+  selectAll,
+  selectTotal,
+} = adapter.getSelectors();
 
 export const selectCurrentUser = (state: AppState) => state.currentUser;
+
+export const selectUsersLoading = createSelector(
+  selectCurrentUser,
+  state => state.usersLoading,
+);
+
+export const selectAllUsers = createSelector(
+  selectCurrentUser,
+  selectAll,
+);
 
 export const selectCurrentUserName = createSelector(
   selectCurrentUser,

@@ -1,0 +1,8 @@
+<span *ngIf="loading$ | async; else list">Chargement...</span>
+
+<ng-template #list>
+  <div *ngFor="let user of users$ | async">
+    <pre>{{ user | json }}</pre>
+    <button (click)="remove(user.name)">remove</button>
+  </div>
+</ng-template>

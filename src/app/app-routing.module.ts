@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ChangeDetectionComponent } from './modules/change-detection/change-detection.component';
 import { UserDetailComponent } from './modules/current-user/components/user-detail/user-detail.component';
 import { BadPipeAsyncComponent } from './modules/dead-store/components/bad-pipe-async.component';
 import { DeadStoreComponent } from './modules/dead-store/components/dead-store.component';
@@ -7,8 +8,17 @@ import { EmptyComponent } from './modules/dead-store/components/empty.component'
 import { GoodAsyncPipeComponent } from './modules/dead-store/components/good-async-pipe.component';
 import { ManualNoDeadStoreComponent } from './modules/dead-store/components/manual-no-dead-store.component';
 import { NoDeadStoreComponent } from './modules/dead-store/components/no-dead-store.component';
+import { UsersListComponent } from './modules/users/components/users-list/users-list.component';
 
 const routes: Routes = [
+  {
+    path: 'users',
+    component: UsersListComponent,
+  },
+  {
+    path: 'changeDetection',
+    component: ChangeDetectionComponent,
+  },
   {
     path: 'current-user',
     children: [
